@@ -1,0 +1,3 @@
+email: spring.chat@yandex.ru
+server:
+  port: 8081
