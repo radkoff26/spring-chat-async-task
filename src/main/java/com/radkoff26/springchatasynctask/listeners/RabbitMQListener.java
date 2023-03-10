@@ -26,7 +26,7 @@ public class RabbitMQListener {
     @RabbitListener(queues = "tasks")
     public void processTasks(QueueMessage queueMessage) {
         log.info("Message was received: " + queueMessage);
-        RunnableCreator runnableCreator = runnableCreatorFactory.createRunnableCreator(queueMessage.type());
+        RunnableCreator runnableCreator = runnableCreatorFactory.createRunnableCreator(queueMessage);
         Runnable runnable = runnableCreator.create(queueMessage.arguments());
         executor.executeTask(runnable);
     }

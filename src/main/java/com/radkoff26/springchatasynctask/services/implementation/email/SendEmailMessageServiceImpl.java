@@ -1,36 +1,34 @@
-package com.radkoff26.springchatasynctask.services.implementation;
+package com.radkoff26.springchatasynctask.services.implementation.email;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.radkoff26.springchatasynctask.services.declaration.MailCodeService;
+import com.radkoff26.springchatasynctask.services.declaration.email.SendEmailMessageService;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 @Service
-@PropertySource("classpath:application.yml")
-public class MailCodeServiceImpl implements MailCodeService {
+public class SendEmailMessageServiceImpl implements SendEmailMessageService {
     @Value("${email}")
     private String emailFrom;
     private final JavaMailSender javaMailSender;
 
-    public MailCodeServiceImpl(JavaMailSender javaMailSender) {
+    public SendEmailMessageServiceImpl(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 
     @Override
-    public void sendCode(String email, String code) {
+    public void sendEmailMessage(String emailTo, String subject, String body) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, false);
             helper.setFrom(emailFrom);
-            helper.setTo(email);
-            helper.setSubject("Authorization Code");
-            helper.setText(String.format("Your confirmation code is %s", code));
+            helper.setTo(emailTo);
+            helper.setSubject(subject);
+            helper.setText(body);
             javaMailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
